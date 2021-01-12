@@ -4,6 +4,7 @@ import core.db.Storage;
 import core.lib.Dao;
 import core.model.Manufacturer;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Dao
@@ -17,7 +18,7 @@ public class ManufacturerDaoImpl implements ManufacturerDao {
     @Override
     public Optional<Manufacturer> get(Long id) {
         return Storage.manufacturers.stream()
-                .filter(x -> x.getId().equals(id))
+                .filter(x -> Objects.equals(x.getId(),id))
                 .findFirst();
     }
 

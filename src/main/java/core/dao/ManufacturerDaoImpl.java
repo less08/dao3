@@ -30,8 +30,7 @@ public class ManufacturerDaoImpl implements ManufacturerDao {
     @Override
     public Manufacturer update(Manufacturer manufacturer) {
         Manufacturer old = get(manufacturer.getId()).get();
-        old.setName(manufacturer.getName());
-        old.setCountry(manufacturer.getCountry());
+        Storage.manufacturers.set(Storage.manufacturers.indexOf(old),manufacturer);
         return old;
     }
 

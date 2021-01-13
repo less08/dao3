@@ -6,6 +6,7 @@ import core.model.Car;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Dao
 public class CarDaoImpl implements CarDao {
@@ -18,7 +19,7 @@ public class CarDaoImpl implements CarDao {
     @Override
     public Optional<Car> get(Long id) {
         return Storage.cars.stream()
-                .filter(x -> Objects.equals(x.getId(), id))
+                .filter(c -> Objects.equals(c.getId(), id))
                 .findFirst();
     }
 
@@ -36,6 +37,17 @@ public class CarDaoImpl implements CarDao {
 
     @Override
     public boolean delete(Long id) {
-        return Storage.cars.removeIf(x -> x.getId().equals(id));
+        return Storage.cars.removeIf(c -> c.getId().equals(id));
+    }
+
+    @Override
+    public List<Car> getAllByDriver(Long driverId) {
+        return Storage.cars.stream()
+                .filter(x -> x.getDrivers()
+                        .stream()
+                        .map(d -> d.getId())
+                        .collect(Collectors.toList())
+                        .contains(driverId))
+                .collect(Collectors.toList());
     }
 }

@@ -1,13 +1,11 @@
 package core.service;
 
 import core.dao.CarDao;
-import core.db.Storage;
 import core.lib.Inject;
 import core.lib.Service;
 import core.model.Car;
 import core.model.Driver;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -41,22 +39,18 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public void addDriverToCar(Driver driver, Car car) {
-        carDao.get(car.getId()).get().getDrivers().add(driver);
+        car.getDrivers().add(driver);
+        carDao.update(car);
     }
 
     @Override
     public void removeDriverFromCar(Driver driver, Car car) {
-        carDao.get(car.getId()).get().getDrivers().remove(driver);
+        car.getDrivers().remove(driver);
+        carDao.update(car);
     }
 
     @Override
     public List<Car> getAllByDriver(Long driverId) {
-        return Storage.cars.stream()
-                .filter(x -> x.getDrivers()
-                        .stream()
-                        .map(d -> d.getId())
-                        .collect(Collectors.toList())
-                        .contains(driverId))
-                .collect(Collectors.toList());
+        return carDao.getAllByDriver(driverId);
     }
 }

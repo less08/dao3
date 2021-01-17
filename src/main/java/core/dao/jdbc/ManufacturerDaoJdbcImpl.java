@@ -48,10 +48,7 @@ public class ManufacturerDaoJdbcImpl implements ManufacturerDao {
             ResultSet resultSet = statement.executeQuery();
             Manufacturer manufacturer = null;
             while (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String country = resultSet.getString("country");
-                manufacturer = new Manufacturer(name, country);
-                manufacturer.setId(resultSet.getObject("id", Long.class));
+                manufacturer = createManufacturer(resultSet);
             }
             return Optional.ofNullable(manufacturer);
         } catch (SQLException e) {
@@ -67,11 +64,7 @@ public class ManufacturerDaoJdbcImpl implements ManufacturerDao {
             ResultSet resultSet = statement.executeQuery();
             List<Manufacturer> manufacturerList = new ArrayList<>();
             while (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String country = resultSet.getString("country");
-                Manufacturer manufacturer = new Manufacturer(name, country);
-                manufacturer.setId(resultSet.getObject("id", Long.class));
-                manufacturerList.add(manufacturer);
+                manufacturerList.add(createManufacturer(resultSet));
             }
             return manufacturerList;
         } catch (SQLException e) {
@@ -107,5 +100,13 @@ public class ManufacturerDaoJdbcImpl implements ManufacturerDao {
         } catch (SQLException e) {
             throw new DataProcessingException("Can't delete manufacturer with id:" + id, e);
         }
+    }
+
+    private Manufacturer createManufacturer(ResultSet resultSet) throws SQLException {
+        String name = resultSet.getString("name");
+        String country = resultSet.getString("country");
+        Manufacturer manufacturer = new Manufacturer(name, country);
+        manufacturer.setId(resultSet.getObject("id", Long.class));
+        return manufacturer;
     }
 }

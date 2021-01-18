@@ -36,8 +36,8 @@ public class Application {
         Driver driver3 = new Driver("Harry", "HP1993");
         driverService.create(driver1);
         driverService.create(driver2);
-        driverService.create(driver3);
-        Driver updateDriver = driverService.get(3L);
+        Driver driver = driverService.create(driver3);
+        Driver updateDriver = driverService.get(driver.getId());
         updateDriver.setName("Keith");
         driverService.update(updateDriver);
         System.out.println(driverService.getAll());

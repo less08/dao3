@@ -1,7 +1,6 @@
 package core.service;
 
 import core.dao.DriverDao;
-import core.db.Storage;
 import core.lib.Inject;
 import core.lib.Service;
 import core.model.Driver;
@@ -24,7 +23,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public List<Driver> getAll() {
-        return Storage.drivers;
+        return driverDao.getAll();
     }
 
     @Override

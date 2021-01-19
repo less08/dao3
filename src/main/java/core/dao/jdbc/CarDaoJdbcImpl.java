@@ -50,11 +50,10 @@ public class CarDaoJdbcImpl implements CarDao {
                  PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
-            Car car = null;
             while (resultSet.next()) {
-                car = createCar(connection, resultSet);
+                return Optional.of(createCar(connection, resultSet));
             }
-            return Optional.ofNullable(car);
+            return Optional.empty();
         } catch (SQLException e) {
             throw new DataProcessingException("Can't get car with id:" + id, e);
         }
@@ -132,7 +131,7 @@ public class CarDaoJdbcImpl implements CarDao {
                 + "JOIN cars_drivers cd ON c.car_id = cd.car_id "
                 + "JOIN drivers d ON d.driver_id = cd.driver_id "
                 + "JOIN manufacturers m ON cars.manufacturer_id = m.manufacturer_id "
-                + "WHERE c.deleted = FALSE AND d.id=?";
+                + "WHERE c.deleted = FALSE AND d.deleted = FALSE AND d.id=?";
         List<Car> cars = new ArrayList<>();
         try (Connection connection = ConnectionUtil.getConnection();
                  PreparedStatement getFilteredStatement = connection.prepareStatement(query)) {

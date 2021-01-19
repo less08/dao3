@@ -7,7 +7,33 @@ CREATE TABLE `storage`.`manufacturers`
   deleted         bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY     (id)
 );
-INSERT INTO `storage`.`manufacturers` ( name, country) VALUES
-  ( 'Audi', 'GERMANY' ),
-  ( 'Tesla', 'USA'),
-  ( 'Chevrolet', 'USA');
+
+CREATE TABLE `storage`.`drivers`
+(
+  id              INT unsigned NOT NULL AUTO_INCREMENT,
+  name            VARCHAR(150) NOT NULL,
+  licence_number  VARCHAR(150) NOT NULL,
+  deleted         bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY     (id)
+);
+
+  CREATE TABLE `storage`.`cars`
+(
+  id              INT unsigned NOT NULL AUTO_INCREMENT,
+  model           VARCHAR(150) NOT NULL,
+  manufacturer_id INT unsigned,
+  deleted         bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY     (id)
+  FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id)
+);
+
+  CREATE TABLE `storage`.`cars_drivers`
+(
+  id              INT unsigned NOT NULL AUTO_INCREMENT,
+  car_id          INT unsigned,
+  driver_id       INT unsigned,
+  deleted         bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY     (id)
+  FOREIGN KEY (car_id) REFERENCES cars(id)
+  FOREIGN KEY (driver_id) REFERENCES drivers(id)
+);

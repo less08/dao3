@@ -6,6 +6,7 @@ import core.model.Driver;
 import core.service.CarService;
 import core.service.DriverService;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,12 +27,18 @@ public class AddDriverToCarController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        Long carId = Long.valueOf(req.getParameter("car_id"));
-        Long driverId = Long.valueOf(req.getParameter("driver_id"));
-        Car car = carService.get(carId);
-        Driver driver = driverService.get(driverId);
-        carService.addDriverToCar(driver, car);
-        resp.sendRedirect(req.getContextPath() + "/");
+            throws IOException, ServletException {
+        try {
+            Long carId = Long.valueOf(req.getParameter("car_id"));
+            Long driverId = Long.valueOf(req.getParameter("driver_id"));
+            Car car = carService.get(carId);
+            Driver driver = driverService.get(driverId);
+            carService.addDriverToCar(driver, car);
+            resp.sendRedirect(req.getContextPath() + "/");
+        } catch (NoSuchElementException e) {
+            req.setAttribute("message", "Incorrect data input. "
+                    + "Check if driver/car with provided id exists");
+            req.getRequestDispatcher("/WEB-INF/views/cars/drivers/add.jsp").forward(req, resp);
+        }
     }
 }

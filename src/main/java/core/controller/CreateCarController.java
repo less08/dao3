@@ -5,7 +5,6 @@ import core.model.Car;
 import core.service.CarService;
 import core.service.ManufacturerService;
 import java.io.IOException;
-import java.util.NoSuchElementException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,18 +25,12 @@ public class CreateCarController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException, ServletException {
-        try {
-            String model = req.getParameter("model");
-            String manufacturer = req.getParameter("manufacturer");
-            Long manufacturerId = Long.parseLong(manufacturer);
-            Car car = new Car(model, manufacturerService.get(manufacturerId));
-            carService.create(car);
-            resp.sendRedirect(req.getContextPath() + "/");
-        } catch (NoSuchElementException e) {
-            req.setAttribute("message", "Incorrect data input. "
-                    + "Check if manufacturer with provided id exists");
-            req.getRequestDispatcher("/WEB-INF/views/cars/create.jsp").forward(req, resp);
-        }
+            throws IOException {
+        String model = req.getParameter("model");
+        String manufacturer = req.getParameter("manufacturer");
+        Long manufacturerId = Long.parseLong(manufacturer);
+        Car car = new Car(model, manufacturerService.get(manufacturerId));
+        carService.create(car);
+        resp.sendRedirect(req.getContextPath() + "/");
     }
 }

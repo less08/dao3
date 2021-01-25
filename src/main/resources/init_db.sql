@@ -13,6 +13,8 @@ CREATE TABLE `storage`.`drivers`
   id              INT unsigned NOT NULL AUTO_INCREMENT,
   name            VARCHAR(150) NOT NULL,
   licence_number  VARCHAR(150) NOT NULL,
+  login            VARCHAR(150) NOT NULL,
+  password            VARCHAR(150) NOT NULL,
   deleted         bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY     (id)
 );

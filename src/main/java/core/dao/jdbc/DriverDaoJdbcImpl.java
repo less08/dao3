@@ -129,7 +129,6 @@ public class DriverDaoJdbcImpl implements DriverDao {
             if (resultSet.next()) {
                 driver = createDriver(resultSet);
             }
-
             return Optional.ofNullable(driver);
         } catch (SQLException ex) {
             throw new DataProcessingException("Can't find driver by login " + login, ex);
